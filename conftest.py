@@ -34,3 +34,15 @@ def email_without_mask():
     email = "".join(random.choices(string.ascii_lowercase, k=5))
 
     return email
+
+@pytest.fixture
+def test_user():
+    username = 'shevelkov_33_test_user@mail.com'
+
+    return username
+
+@pytest.fixture
+def password():
+    password = 'password'
+
+    return password
