@@ -28,3 +28,9 @@ def random_email():
     email = f"{user}@{domain}.com"
 
     return email
+
+@pytest.fixture
+def email_without_mask():
+    email = "".join(random.choices(string.ascii_lowercase, k=5))
+
+    return email

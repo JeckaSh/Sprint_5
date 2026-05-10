@@ -16,10 +16,13 @@ ALREADY_HAVE_ACCOUNT_BUTTON = (
     ".//button[contains(text(), 'Уже есть аккаунт')]",
 )
 
+# Локаторы сообщений об ошибке при регистрации
+ERROR_TEXT = ("xpath", ".//span[contains(text(), 'Ошибка')]")
+ERROR_FIELDS = ("xpath", ".//div[@class = 'input_inputError__fLUP9']")
+
 # Локаторы авторизованного пользователя
 USERNAME = ("xpath", ".//h3[contains(text(), 'User.')]")
 AVATAR_BUTTON = ("xpath", ".//button[@class='circleSmall']")
-FLEX_ROW = ("class_name", "flexRow")
 
 # Локаторы названия модальных окон
 LOG_IN_FORM = (

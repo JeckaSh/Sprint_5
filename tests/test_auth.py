@@ -46,3 +46,37 @@ def test_user_registration_success(driver, url, random_email):
 
     # проверяем, что отображается аватар пользователя
     assert user_avatar.is_displayed()
+
+
+def test_user_registration_fault(driver, url, email_without_mask):
+    driver.get(url)
+
+    driver.find_element(*AUTH_BUTTON).click()
+
+    WebDriverWait(driver, 5).until(
+        expected_conditions.visibility_of_element_located(LOG_IN_FORM)
+    )
+
+    driver.find_element(*NO_ACCOUNT_BUTTON).click()
+
+    WebDriverWait(driver, 5).until(
+        expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
+    )
+
+    driver.find_element(*EMAIL_FIELD).send_keys(email_without_mask)
+
+    driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
+
+    WebDriverWait(driver, 5).until(
+        expected_conditions.visibility_of_element_located(ERROR_TEXT)
+    )
+
+    error_message = driver.find_element(*ERROR_TEXT)
+
+    error_fileds = driver.find_element(*ERROR_FIELDS)
+
+    # проверяем, что отображается сообщение об ошибке
+    assert error_message.is_displayed()
+
+    # проверяем, что отображается красная рамка на полях ввода
+    assert error_fileds.is_displayed()
