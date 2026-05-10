@@ -23,6 +23,7 @@ ERROR_FIELDS = ("xpath", ".//div[@class = 'input_inputError__fLUP9']")
 # Локаторы авторизованного пользователя
 USERNAME = ("xpath", ".//h3[contains(text(), 'User.')]")
 AVATAR_BUTTON = ("xpath", ".//button[@class='circleSmall']")
+LOGOUT_BUTTON = ("xpath", ".//button[contains(text(), 'Выйти')]")
 
 # Локаторы названия модальных окон
 LOG_IN_FORM = (
