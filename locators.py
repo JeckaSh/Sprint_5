@@ -34,7 +34,43 @@ SIGN_IN_FORM = (
     "xpath",
     ".//h1[contains(text(), 'Зарегистрироваться')]",
 )
-THROW_ADVICE_FORM = (
+ADS_ERROR_MESSAGE = (
     "xpath",
     ".//h1[contains(text(), 'Чтобы разместить объявление, авторизуйтесь')]",
 )
+
+# Локаторы страницы добавления объявлений
+ADS_LIST = ("xpath", ".//form[@class='createListing_shell__A5EA7']")
+AD_NAME = ("name", "name")
+AD_DESCRIPTION = ("xpath", ".//textarea[@placeholder='Описание товара']")
+AD_PRICE = ("name", "price")
+
+# Локаторы выбора категории объявления
+AD_CAREGORY_DEFAULT_VALUE = ("name", "category")
+AD_CATEGORY_DROPDOWN_BUTTON = (
+    "xpath",
+    ".//input[@value='Авто']/following::button[1]",
+)
+AD_DROPDOWN_MENU = ("xpath", ".//div[@class='dropDownMenu_options__CmHmm']")
+AD_CATEGORY_SELECT = ("xpath", ".//span[contains(text(), 'Хобби')]")
+
+# Локатор выбора состояния товара
+AD_RADIO_BUTTON_NOT_ACTIVE = (
+    "xpath",
+    ".//div[@class = 'radioUnput_inputRegular__FbVbr']",
+)
+AD_RADIO_BUTTON_ACTIVE = ("xpath", ".//div[@class='radioUnput_inputActive__eC-HY']")
+
+# Локаторы выбора города
+AD_CITY_DEFAULT_VALUE = ("name", "city")
+AD_CITY_DROPDOWN_BUTTON = (
+    "xpath",
+    ".//input[@value='Москва']/following::button[1]",
+)
+AD_CITY_SELECT = ("xpath", ".//span[contains(text(), 'Санкт-Петербург')]")
+
+AD_CREATE_BUTTON = ("xpath", ".//button[contains(text(), 'Опубликовать')]")
+
+# Локаторы страницы профиля
+PROFILE_TITLE = ("xpath", ".//h1[contains(text(), 'Мой профиль')]")
+PROFILE_MY_AD = ("xpath", ".//div[@*='card']")
