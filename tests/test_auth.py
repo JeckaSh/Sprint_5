@@ -1,166 +1,164 @@
 from locators import *
+from tests.data import *
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 
-def test_user_registration_success(driver, url, random_email, password):
-    driver.get(url)
+class TestAuth:
+    def test_user_registration_success(self, driver):
+        driver.get(url)
 
-    driver.find_element(*AUTH_BUTTON).click()
+        driver.find_element(*AUTH_BUTTON).click()
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(LOG_IN_FORM)
-    )
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(LOG_IN_FORM)
+        )
 
-    driver.find_element(*NO_ACCOUNT_BUTTON).click()
+        driver.find_element(*NO_ACCOUNT_BUTTON).click()
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
-    )
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
+        )
 
-    driver.find_element(*EMAIL_FIELD).send_keys(random_email)
-    driver.find_element(*PASSWORD_FIELD).send_keys(password)
-    driver.find_element(*REPEAT_PASSWORD_FIELD).send_keys(password)
+        driver.find_element(*EMAIL_FIELD).send_keys(random_email)
+        driver.find_element(*PASSWORD_FIELD).send_keys(password)
+        driver.find_element(*REPEAT_PASSWORD_FIELD).send_keys(password)
 
-    driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
+        driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
 
-    username = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(USERNAME)
-    )
+        username = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(USERNAME)
+        )
 
-    user_avatar = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(AVATAR_BUTTON)
-    )
+        user_avatar = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(AVATAR_BUTTON)
+        )
 
-    # проверяем, что отображается аватар пользователя
-    assert user_avatar.is_displayed() and username.is_displayed()
+        # проверяем, что отображается аватар пользователя
+        assert user_avatar.is_displayed() and username.is_displayed()
 
+    def test_user_registration_with_invalid_email_format(self, driver):
+        driver.get(url)
 
-def test_user_registration_with_invalid_email_format(driver, url, email_without_mask):
-    driver.get(url)
+        driver.find_element(*AUTH_BUTTON).click()
 
-    driver.find_element(*AUTH_BUTTON).click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(LOG_IN_FORM)
+        )
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(LOG_IN_FORM)
-    )
+        driver.find_element(*NO_ACCOUNT_BUTTON).click()
 
-    driver.find_element(*NO_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
+        )
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
-    )
+        driver.find_element(*EMAIL_FIELD).send_keys(email_without_mask)
 
-    driver.find_element(*EMAIL_FIELD).send_keys(email_without_mask)
+        driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
 
-    driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(ERROR_TEXT)
+        )
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(ERROR_TEXT)
-    )
+        error_message = driver.find_element(*ERROR_TEXT)
 
-    error_message = driver.find_element(*ERROR_TEXT)
+        error_fields = driver.find_element(*ERROR_FIELDS)
 
-    error_fileds = driver.find_element(*ERROR_FIELDS)
+        # проверяем, что отображается красная рамка на полях ввода
+        assert error_fields.is_displayed() and error_message.is_displayed()
 
-    # проверяем, что отображается красная рамка на полях ввода
-    assert error_fileds.is_displayed() and error_message.is_displayed()
+    def test_user_registration_with_existing_account(self, driver):
+        driver.get(url)
 
+        driver.find_element(*AUTH_BUTTON).click()
 
-def test_user_registration_with_existing_account(driver, url, test_user, password):
-    driver.get(url)
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(LOG_IN_FORM)
+        )
 
-    driver.find_element(*AUTH_BUTTON).click()
+        driver.find_element(*NO_ACCOUNT_BUTTON).click()
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(LOG_IN_FORM)
-    )
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
+        )
 
-    driver.find_element(*NO_ACCOUNT_BUTTON).click()
+        # регистируем пользователя
+        driver.find_element(*EMAIL_FIELD).send_keys(test_user)
+        driver.find_element(*PASSWORD_FIELD).send_keys(password)
+        driver.find_element(*REPEAT_PASSWORD_FIELD).send_keys(password)
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(SIGN_IN_FORM)
-    )
+        driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
 
-    # регистируем пользователя
-    driver.find_element(*EMAIL_FIELD).send_keys(test_user)
-    driver.find_element(*PASSWORD_FIELD).send_keys(password)
-    driver.find_element(*REPEAT_PASSWORD_FIELD).send_keys(password)
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(ERROR_TEXT)
+        )
 
-    driver.find_element(*CREATE_ACCOUNT_BUTTON).click()
+        error_message = driver.find_element(*ERROR_TEXT)
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(ERROR_TEXT)
-    )
+        error_fields = driver.find_element(*ERROR_FIELDS)
 
-    error_message = driver.find_element(*ERROR_TEXT)
+        # проверяем, что отображается красная рамка на полях ввода
+        assert error_fields.is_displayed() and error_message.is_displayed()
 
-    error_fileds = driver.find_element(*ERROR_FIELDS)
+    def test_user_log_in_success(self, driver):
+        driver.get(url)
 
-    # проверяем, что отображается красная рамка на полях ввода
-    assert error_fileds.is_displayed() and error_message.is_displayed()
+        driver.find_element(*AUTH_BUTTON).click()
 
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(LOG_IN_FORM)
+        )
 
-def test_user_log_in_success(driver, url, test_user, password):
-    driver.get(url)
+        # авторизуем пользователя с ранее созданными данными
+        driver.find_element(*EMAIL_FIELD).send_keys(test_user)
+        driver.find_element(*PASSWORD_FIELD).send_keys(password)
 
-    driver.find_element(*AUTH_BUTTON).click()
+        driver.find_element(*LOG_IN_BUTTON).click()
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(LOG_IN_FORM)
-    )
+        username = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(USERNAME)
+        )
 
-    # авторизуем пользователя с ранее созданными данными
-    driver.find_element(*EMAIL_FIELD).send_keys(test_user)
-    driver.find_element(*PASSWORD_FIELD).send_keys(password)
+        user_avatar = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(AVATAR_BUTTON)
+        )
 
-    driver.find_element(*LOG_IN_BUTTON).click()
+        # проверяем, что отображется имя и аватар пользователя
+        assert username.is_displayed() and user_avatar.is_displayed()
 
-    username = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(USERNAME)
-    )
+    def test_user_log_out_success(self, driver):
+        driver.get(url)
 
-    user_avatar = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(AVATAR_BUTTON)
-    )
+        driver.find_element(*AUTH_BUTTON).click()
 
-    # проверяем, что отображется имя и аватар пользователя
-    assert username.is_displayed() and user_avatar.is_displayed()
+        WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(LOG_IN_FORM)
+        )
 
+        # авторизуем пользователя с ранее созданными данными
+        driver.find_element(*EMAIL_FIELD).send_keys(test_user)
+        driver.find_element(*PASSWORD_FIELD).send_keys(password)
 
-def test_user_log_out_success(driver, url, test_user, password):
-    driver.get(url)
+        driver.find_element(*LOG_IN_BUTTON).click()
 
-    driver.find_element(*AUTH_BUTTON).click()
+        username = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(USERNAME)
+        )
 
-    WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(LOG_IN_FORM)
-    )
+        user_avatar = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(AVATAR_BUTTON)
+        )
 
-    # авторизуем пользователя с ранее созданными данными
-    driver.find_element(*EMAIL_FIELD).send_keys(test_user)
-    driver.find_element(*PASSWORD_FIELD).send_keys(password)
+        # проверяем, что отображется имя и аватар пользователя
+        assert username.is_displayed() and user_avatar.is_displayed()
 
-    driver.find_element(*LOG_IN_BUTTON).click()
+        driver.find_element(*LOGOUT_BUTTON).click()
 
-    username = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(USERNAME)
-    )
+        log_in_button = WebDriverWait(driver, 5).until(
+            expected_conditions.visibility_of_element_located(AUTH_BUTTON)
+        )
 
-    user_avatar = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(AVATAR_BUTTON)
-    )
-
-    # проверяем, что отображется имя и аватар пользователя
-    assert username.is_displayed() and user_avatar.is_displayed()
-
-    driver.find_element(*LOGOUT_BUTTON).click()
-
-    log_in_button = WebDriverWait(driver, 5).until(
-        expected_conditions.visibility_of_element_located(AUTH_BUTTON)
-    )
-
-    # проверям что кнопка "войти или зарегистрироваться" снова отображается
-    assert log_in_button.is_displayed()
+        # проверям что кнопка "войти или зарегистрироваться" снова отображается
+        assert log_in_button.is_displayed()
